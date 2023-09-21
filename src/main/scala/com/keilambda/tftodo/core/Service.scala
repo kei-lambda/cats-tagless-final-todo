@@ -25,14 +25,14 @@ trait TaskService[F[_]: Functor]:
       }
     )
 
-  def groupByStatus(using repo: TaskRepo[F, Int]): F[StatusRecord[Array[Task]]] =
+  def groupByStatus(using repo: TaskRepo[F, Int]): F[StatusRecord[Seq[Task]]] =
     Functor[F].map(repo.getAll)(
       _.foldRight(
         StatusRecord(
-          pending = Array[Task](),
-          doing = Array[Task](),
-          done = Array[Task](),
-          abandoned = Array[Task]()
+          pending = Vector[Task](),
+          doing = Vector[Task](),
+          done = Vector[Task](),
+          abandoned = Vector[Task]()
         )
       ) { (curr, acc) =>
         import Status.*
